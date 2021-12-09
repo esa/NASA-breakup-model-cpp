@@ -1,0 +1,22 @@
+---
+#List of satellites
+satellites:
+  - name: "Iridium 33"
+    id: 24946
+    satType: SPACECRAFT
+    mass: 560.0
+    velocity: [11700.0, 0.0, 0.0]
+#    kepler:
+#      semi-major-axis: 1.0
+#      eccentricity: 2.0
+#      inclination: 3.0
+#      longitude-of-the-ascending-node: 4.0
+#      argument-of-periapsis: 5.0
+#      true-anomaly: 6.0
+#      eccentric-anomaly: 7.0
+#      mean-anomaly: 8.0
+  - name: "Kosmos 2251"
+    id: 22675
+    satType: SPACECRAFT
+    mass: 950.0
+    velocity: [0.0, 0.0, 0.0]

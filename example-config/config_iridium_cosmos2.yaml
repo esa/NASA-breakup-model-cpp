@@ -1,0 +1,13 @@
+---
+#Data taken from http://celestrak.com/events/collision/
+simulation:
+  minimalCharacteristicLength: 0.05
+  simulationType: COLLISION
+  inputSource: ["../example-config/data_iridium_cosmos2.yaml"]
+  idFilter: [24946, 22675]
+inputOutput:
+  target: ["iridium_cosmos_input.csv", "iridium_cosmos_input.vtu"]
+  kepler: True
+resultOutput:
+  target: ["iridium_cosmos_result.csv", "iridium_cosmos_result.vtu"]
+  kepler: True

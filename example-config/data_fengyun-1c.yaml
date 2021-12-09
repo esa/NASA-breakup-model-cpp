@@ -1,0 +1,14 @@
+---
+satellites:
+  - name: "Fengyun 1C"
+    id: 25730
+    satType: SPACECRAFT
+    mass: 880.0
+    velocity: [0, 0, 0]
+    position: [0, 0, 0]
+  - name: "Kincetic Kill Vehicle"
+    id: 1
+    satType: SPACECRAFT
+    mass: 500.0                #https://en.wikipedia.org/wiki/DF-21
+    velocity: [9360.0, 0, 0]
+    position: [0, 0, 0]

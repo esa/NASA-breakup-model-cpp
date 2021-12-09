@@ -1,0 +1,13 @@
+---
+simulation:
+  minimalCharacteristicLength: 0.05
+  simulationType: COLLISION
+  currentMaxID: 48514
+  inputSource: ["/data.yaml"]
+  idFilter: [123, 456]
+inputOutput:
+  target: ["input.vtu"]
+  kepler: True
+  csvPattern: "IL"
+resultOutput:
+  target: ["result.csv", "result.vtu"]

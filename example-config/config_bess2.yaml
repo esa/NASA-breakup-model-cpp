@@ -1,0 +1,13 @@
+---
+simulation:
+  minimalCharacteristicLength: 0.0001
+  simulationType: COLLISION
+  inputSource: ["../example-config/data_bess2.yaml"]
+inputOutput:
+  target: ["input.csv", "input.vtu"]
+  #kepler: True
+  #csvPattern: "IL"
+resultOutput:
+  target: ["result.csv", "result.vtu"]
+  #kepler: True
+  #csvPattern: "IL"

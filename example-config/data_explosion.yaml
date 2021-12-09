@@ -1,0 +1,9 @@
+---
+satellites:
+  - name: "Nimbus 6 R/B"
+    id: 7946
+    satType: RB
+    # area: 3.2315
+    mass: 839.0         # Delta 2nd stage
+    velocity: [0, 0, 0] #Here the velocity and position are not really required
+    position: [0, 0, 0]

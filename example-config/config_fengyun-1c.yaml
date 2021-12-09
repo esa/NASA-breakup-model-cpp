@@ -1,0 +1,12 @@
+---
+#Data taken from http://celestrak.com/events/collision/
+simulation:
+  minimalCharacteristicLength: 0.05
+  simulationType: COLLISION
+  inputSource: ["../example-config/data_fengyun-1c.yaml"]
+inputOutput:
+  target: ["fengyun-1c_input.csv", "fengyun-1c_input.vtu"]
+  kepler: False
+resultOutput:
+  target: ["fengyun-1c_result.csv", "fengyun-1c_result.vtu"]
+  kepler: False

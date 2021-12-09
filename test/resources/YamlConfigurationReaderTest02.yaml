@@ -1,0 +1,6 @@
+---
+simulation:
+  minimalCharacteristicLength: 0.10
+  simulationType: COLLISION
+  inputSource: ["/data.yaml"]
+  idFilter: [789, 101112, 131415, 1617181920]

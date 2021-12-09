@@ -1,0 +1,13 @@
+---
+#Data taken from http://celestrak.com/events/collision/
+satellites:
+  - name: "Iridium 33"
+    id: 24946
+    satType: SPACECRAFT
+    mass: 556.0
+    kepler: "../example-config/iridium_cosmos_tle.txt"
+  - name: "Kosmos 2251"
+    id: 22675
+    satType: SPACECRAFT
+    mass: 900.0
+    kepler: "../example-config/iridium_cosmos_tle.txt"

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<VTKFile byte_order="LittleEndian" type="UnstructuredGrid" version="0.1">
+  <UnstructuredGrid>
+    <Piece NumberOfCells="0" NumberOfPoints="4">
+      <PointData>
+        <DataArray Name="characteristic-length" NumberOfComponents="1" format="ascii" type="Float32">
+          100
+          200
+          300
+          400
+        </DataArray>
+        <DataArray Name="mass" NumberOfComponents="1" format="ascii" type="Float32">
+          10
+          20
+          30
+          40
+        </DataArray>
+        <DataArray Name="area" NumberOfComponents="1" format="ascii" type="Float32">
+          0
+          0
+          0
+          0
+        </DataArray>
+        <DataArray Name="area-to-mass" NumberOfComponents="1" format="ascii" type="Float32">
+          0
+          0
+          0
+          0
+        </DataArray>
+        <DataArray Name="velocity" NumberOfComponents="3" format="ascii" type="Float32">
+          1 1 1
+          2 2 2
+          3 3 3
+          4 4 4
+        </DataArray>
+        <DataArray Name="ejection-velocity" NumberOfComponents="3" format="ascii" type="Float32">
+          100 1 1
+          200 2 2
+          300 3 3
+          400 4 4
+        </DataArray>
+      </PointData>
+      <CellData/>
+      <Points>
+        <DataArray Name="position" NumberOfComponents="3" format="ascii" type="Float32">
+          1 1 1
+          2 2 2
+          3 3 3
+          4 4 4
+        </DataArray>
+      </Points>
+      <Cells>
+        <DataArray Name="types" NumberOfComponents="0" format="ascii" type="Float32"/>
+      </Cells>
+    </Piece>
+  </UnstructuredGrid>
+</VTKFile>

@@ -1,0 +1,13 @@
+---
+#List of satellites
+satellites:
+  - name: "Target"
+    id: 1
+    satType: SPACECRAFT
+    mass: 100.0
+    velocity: [0, 0.0, 0.0]
+  - name: "Projectile"
+    id: 2
+    satType: SPACECRAFT
+    mass: 0.00037
+    velocity: [4500, 0.0, 0.0]

@@ -1,0 +1,13 @@
+---
+#Data taken from Liou, J.-C., et al. “The new NASA orbital debris breakup model” COSPAR Colloquia Series Volume 15 (2002): 363-367
+#The full-tle.txt file contains TLE data for every satcat catalog, it can be obtained on https://www.space-track.org/
+simulation:
+  minimalCharacteristicLength: 0.1
+  simulationType: EXPLOSION
+  inputSource: ["../example-config/data_explosion.yaml"]
+  idFilter: [7946]
+inputOutput:
+  target: ["nimbus6_input.csv"]
+resultOutput:
+  target: ["nimbus6_result.csv"]
+  kepler: True

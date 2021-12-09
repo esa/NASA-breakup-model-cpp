@@ -1,0 +1,35 @@
+---
+#List of satellites
+satellites:
+  - name: "Iridium 33"
+    id: 1
+    satType: SPACECRAFT
+    mass: 700.0
+    velocity: [1.0, 1.0, 1.0]
+  - name: "Kosmos 2251"
+    id: 2
+    satType: SC
+    mass: 900.0
+    velocity: [2.0, 2.0, 2.0]
+  - name: "1962-060B"
+    id: 3
+    satType: RB
+    area: 3.5428
+    velocity: [2.0, 2.0, 2.0]
+  - name: "UFO"
+    id: 4
+    satType: UNKNOWN
+    area: 3333.33
+    velocity: [ 11.0, 22.0, 33.0 ]
+  - name: "ISS"
+    id: 25544
+    satType: SC
+    area: 399.05
+    kepler:
+      semi-major-axis: 6798505.86
+      eccentricity: 0.0002215
+      inclination: 0.9013735469
+      longitude-of-the-ascending-node: 4.724103630312
+      argument-of-periapsis: 2.237100203348
+      mean-anomaly: 0.2405604761
+      eccentric-anomaly: 0.100

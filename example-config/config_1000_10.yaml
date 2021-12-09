@@ -1,0 +1,8 @@
+---
+# Compare to LUCA2 - AN ENHANCED LONG-TERM UTILITY FOR COLLISION ANALYSIS (1m_1mm.pdf)
+simulation:
+  minimalCharacteristicLength: 0.05
+  simulationType: COLLISION
+  inputSource: ["../example-config/data_1000_10.yaml"]
+resultOutput:
+  target: ["result.csv", "result.vtu"]

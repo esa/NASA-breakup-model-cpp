@@ -1,0 +1,7 @@
+---
+simulation:
+  minimalCharacteristicLength: 0.05
+  inputSource: ["../example-config/satcat.csv", "../example-config/iridium-33-debris.txt"]
+inputOutput:
+  target: ["iridium_fragments.csv"]
+  kepler: True
