@@ -248,6 +248,9 @@ target_link_libraries(fooExe PUBLIC breakupModel_lib)
 int main() {
     // generate satellites to collide
     SatelliteBuilder satelliteBuilder;
+    // The number of Satellites determines the type of the simulation
+    // Add an idFilter to your config to only consider one or two satellites.
+    // (See brief-overview-on-the-available-options)
     std::vector<Satellite> satellites{
         satelliteBuilder
             .setID(0)
