@@ -201,6 +201,8 @@ To create a new Breakup Simulation just follow these four steps:
 3. Create your Breakup Simulation
 4. Run and get the Result!
 
+For further examples see [main.cpp](src/main.cpp) and the provided [example configurarions](example-config).
+
 ### Example CMake integration:
 ```cmake
 cmake_minimum_required(VERSION 3.16)
