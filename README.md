@@ -83,10 +83,9 @@ The given yaml-file should look like this:
   simulation:
     minimalCharacteristicLength: 0.05 #minimal fragment L_c in [m]
     simulationType: COLLISION         #Option (Alias): COLLISION (CO) or EXPLOSION (EX)
-                                      #If not given type is determined
-                                      # by number of input satellites 
+                                      #If not given, type is determined by number of (filtered)
+                                      #input satellites (1: EX, 2: CO, >2: Exception) 
     currentMaxID: 48514               #For determining fragment ID
-                               
                                       #Should be the currently largest given NORAD-Catalog ID
                                       #If not given, zero is assumed
     inputSource: ["../data.yaml"]     #Path to input file(s) - One of the following:
