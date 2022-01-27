@@ -246,11 +246,11 @@ target_link_libraries(fooExe PUBLIC breakupModel_lib)
 #include <breakupModel/simulation/BreakupBuilder.h>
 
 int main() {
-    // generate satellites to collide
+    // Generate satellites to collide.
     SatelliteBuilder satelliteBuilder;
-    // The number of Satellites determines the type of the simulation
+    // The number of Satellites determines the type of the simulation.
     // Add an idFilter to your config to only consider one or two satellites.
-    // (See brief-overview-on-the-available-options)
+    // (See brief-overview-on-the-available-options.)
     std::vector<Satellite> satellites{
         satelliteBuilder
             .setID(0)
@@ -268,12 +268,12 @@ int main() {
 
     // Minimal RuntimeInputSource only with minLc = 0.05 [m] and all involved satellites.
     auto configSource = std::make_shared<RuntimeInputSource>(0.05, satellites);
-    // Initialize a BreakupBuilder with a configuration object
-    // (YMALConfigurationReader or RuntimeInputSource or your own derived source)
+    // Initialize a BreakupBuilder with a configuration object.
+    // (YMALConfigurationReader or RuntimeInputSource or your own derived source.)
     BreakupBuilder breakupBuilder{configSource};
-    // Create the actual breakup simulation
+    // Create the actual breakup simulation.
     auto breakup = breakupBuilder.getBreakup();
-    // Run it and collect the result
+    // Run it and collect the result.
     breakup->run();
     std::vector<Satellite> debris = breakup->getResult();
 }
