@@ -36,16 +36,22 @@ void Collision::calculateFragmentCount() {
     double mass = 0;
 
     //The Relative Collision Velocity
-    double dv = euclideanNorm(sat1.getVelocity() - sat2.getVelocity());
+    const double dv = euclideanNorm(sat1.getVelocity() - sat2.getVelocity());
+    // Squared Relative Collision Velocity
+    const double dv2 = dv * dv;
 
     //Calculate the Catastrophic Ratio, if greater than 40 J/g then we have a catastrophic collision
     //A catastrophic collision means that both satellites are fully fragmented whereas in a non-catastrophic collision
     //only the smaller satellite is fragmented (see here Section: Collision in [johnson et al.]
-    double catastrophicRatio = (sat2.getMass() * dv * dv) / (2.0 * sat1.getMass() * 1000.0);
+    double catastrophicRatio = (sat2.getMass() * dv2) / (2.0 * sat1.getMass() * 1000.0);
     if (catastrophicRatio < 40.0) {
         _isCatastrophic = false;
-        //The paper states this as product of the projectile's mass in [kg] and the collision velocity in [km/s]
-        mass = sat2.getMass() * dv / 1000.0;
+        // The original work states this as product of the projectile's mass in [kg] and the collision velocity in [km/s]
+        // The recent paper below states that the original publication lacked the exponent 2 on the collision velocity
+        // Horstman, A. (2020). Enhancement of s/c Fragmentation and Environment Evolution Models.
+        // Final Report, Contract N. 4000115973/15/D/SR,
+        // Institute of Space System, Technische Universität Braunschweig, 26(08).
+        mass = sat2.getMass() * dv2 / 1000.0;
     } else {
         _isCatastrophic = true;
         mass = sat1.getMass() + sat2.getMass();
@@ -71,14 +77,14 @@ void Collision::assignParentProperties() {
     //Not parallel! We do not want any race conditions on assignedMassForBigSatellite
     std::for_each(tupleView.begin(), tupleView.end(),
                   [&](auto &tuple) {
-        //Order in the tuple: 0: Characteristic Length | 1: Mass | 2: Velocity | 3: NamePtr
-        auto &[lc, mass, velocity, name] = tuple;
-        if (lc > smallSat.getCharacteristicLength()) {
-            name = debrisNameBigPtr;
-            velocity = bigSat.getVelocity();
-            assignedMassForBigSatellite += mass;
-        }
-    });
+                      //Order in the tuple: 0: Characteristic Length | 1: Mass | 2: Velocity | 3: NamePtr
+                      auto &[lc, mass, velocity, name] = tuple;
+                      if (lc > smallSat.getCharacteristicLength()) {
+                          name = debrisNameBigPtr;
+                          velocity = bigSat.getVelocity();
+                          assignedMassForBigSatellite += mass;
+                      }
+                  });
 
     //Assign the rest with respect to the already assigned debris-mass for the big satellite
     //first if: the mass of the bigSat is normed to the actual produced mass of the simulation
@@ -86,17 +92,17 @@ void Collision::assignParentProperties() {
     //Not parallel! We do not want any race conditions on assignedMassForBigSatellite
     std::for_each(tupleView.begin(), tupleView.end(),
                   [&](auto &tuple) {
-        //Order in the tuple: 0: Characteristic Length | 1: Mass | 2: Velocity | 3: NamePtr
-        auto &[lc, mass, velocity, name] = tuple;
-        if (lc <= smallSat.getCharacteristicLength()) {
-            if (assignedMassForBigSatellite < normedMassBigSat) {
-                name = debrisNameBigPtr;
-                velocity = bigSat.getVelocity();
-                assignedMassForBigSatellite += mass;
-            } else {
-                name = debrisNameSmallPtr;
-                velocity = smallSat.getVelocity();
-            }
-        }
-    });
+                      //Order in the tuple: 0: Characteristic Length | 1: Mass | 2: Velocity | 3: NamePtr
+                      auto &[lc, mass, velocity, name] = tuple;
+                      if (lc <= smallSat.getCharacteristicLength()) {
+                          if (assignedMassForBigSatellite < normedMassBigSat) {
+                              name = debrisNameBigPtr;
+                              velocity = bigSat.getVelocity();
+                              assignedMassForBigSatellite += mass;
+                          } else {
+                              name = debrisNameSmallPtr;
+                              velocity = smallSat.getVelocity();
+                          }
+                      }
+                  });
 }
