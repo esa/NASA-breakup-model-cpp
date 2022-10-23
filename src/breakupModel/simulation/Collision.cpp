@@ -29,12 +29,6 @@ void Collision::calculateFragmentCount() {
         std::swap(sat1, sat2);
     }
 
-    //Sets the _input mass which will be required later for mass conservation purpose (maximal upper bound)
-    _inputMass = sat1.getMass() + sat2.getMass();
-
-    //Contains the mass M (later filled with an adequate value)
-    double mass = 0;
-
     //The Relative Collision Velocity
     const double dv = euclideanNorm(sat1.getVelocity() - sat2.getVelocity());
     // Squared Relative Collision Velocity
@@ -51,16 +45,35 @@ void Collision::calculateFragmentCount() {
         // Horstman, A. (2020). Enhancement of s/c Fragmentation and Environment Evolution Models.
         // Final Report, Contract N. 4000115973/15/D/SR,
         // Institute of Space System, Technische Universität Braunschweig, 26(08).
-        mass = sat2.getMass() * dv2 / 1000.0;
+        _inputMass = sat2.getMass() * dv2 / 1000.0;
     } else {
         _isCatastrophic = true;
-        mass = sat1.getMass() + sat2.getMass();
+        _inputMass = sat1.getMass() + sat2.getMass();
     }
 
     //The fragment Count, respectively Equation 4
-    auto fragmentCount = static_cast<size_t>(0.1 * std::pow(mass, 0.75) *
+    auto fragmentCount = static_cast<size_t>(0.1 * std::pow(_inputMass, 0.75) *
                                              std::pow(_minimalCharacteristicLength, -1.71));
     this->generateFragments(fragmentCount, sat1.getPosition());
+}
+
+void Collision::addFurtherFragments() {
+    Breakup::addFurtherFragments();
+    // If not catastrophic, add a remainder fragment
+    if (!_isCatastrophic) {
+        Satellite &sat1 = _input.at(0);
+        Satellite &sat2 = _input.at(1);
+        const double totalMass = sat1.getMass() + sat2.getMass();
+
+        auto tuple = _output.appendElement();
+        auto &[lc, areaToMassRatio, area, mass] = tuple;
+
+        // One special fragment representing the cratered remainder of the target satellite hit by the projectile
+        mass = totalMass - _inputMass;
+        lc = util::calculateCharacteristicLengthFromMass(mass);
+        areaToMassRatio = calculateAreaMassRatio(lc);
+        area = calculateArea(lc);
+    }
 }
 
 void Collision::assignParentProperties() {

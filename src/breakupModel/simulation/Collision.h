@@ -22,6 +22,9 @@ private:
 
     void assignParentProperties() final;
 
+protected:
+    void addFurtherFragments() override;
+
 public:
 
     bool isIsCatastrophic() const {

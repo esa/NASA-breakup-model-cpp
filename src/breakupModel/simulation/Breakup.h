@@ -218,6 +218,8 @@ protected:
      */
     void enforceMassConservation();
 
+    virtual void addFurtherFragments();
+
     /**
      * This Method does assign each fragment a parent (trivial in Explosion case) and checks that
      * the step before did not produce more mass than the input contained if so warning is printed
@@ -234,8 +236,6 @@ protected:
      * The subclasses therefore init _deltaVelocityFactorOffset differently.
      */
     void deltaVelocityDistribution();
-
-private:
 
     /**
      * This Method calculates one characteristic Length for one Debris Particle.
@@ -261,6 +261,7 @@ private:
      */
     static double calculateArea(double characteristicLength);
 
+
     /**
      * Calculates the Mass for one fragment.
      * This method uses equation (10) from the the NASA Breakup Model Paper.
@@ -269,7 +270,6 @@ private:
      * @return Mass in [kg]
      */
     static double calculateMass(double area, double areaMassRatio);
-
 
     /**
      * Transforms a scalar velocity into a 3-dimensional cartesian velocity vector.
