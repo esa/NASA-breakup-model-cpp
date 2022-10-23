@@ -159,4 +159,11 @@ public:
      */
     std::tuple<double &, double &, double &, double &> appendElement();
 
+    /**
+     * This resizes the Structure by one additional Slot and returns references to the
+     * characteristic length, area-mass-ratio, area and mass of the new element.
+     * @return tuple of references to characteristic length, area-mass-ratio, area and mass
+     */
+    std::tuple<double &, double &, double &, double &> prependElement();
+
 };

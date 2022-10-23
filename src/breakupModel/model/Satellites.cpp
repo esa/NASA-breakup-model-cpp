@@ -67,3 +67,18 @@ std::tuple<double &, double &, double &, double &> Satellites::appendElement() {
             {characteristicLength.back(), areaToMassRatio.back(), area.back(), mass.back()};
 }
 
+std::tuple<double &, double &, double &, double &> Satellites::prependElement() {
+    this->resize(this->size() + 1);
+
+    std::swap(name.front(), name.back());
+    std::swap(characteristicLength.front(), characteristicLength.back());
+    std::swap(areaToMassRatio.front(), areaToMassRatio.back());
+    std::swap(mass.front(), mass.back());
+    std::swap(area.front(), area.back());
+    std::swap(ejectionVelocity.front(), ejectionVelocity.back());
+    std::swap(velocity.front(), velocity.back());
+
+    return std::tuple<double &, double &, double &, double &>
+            {characteristicLength.front(), areaToMassRatio.front(), area.front(), mass.front()};
+}
+

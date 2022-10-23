@@ -65,7 +65,8 @@ void Collision::addFurtherFragments() {
         Satellite &sat2 = _input.at(1);
         const double totalMass = sat1.getMass() + sat2.getMass();
 
-        auto tuple = _output.appendElement();
+        // Prepend, so that the bigger satellite (target) is assigned as parent
+        auto tuple = _output.prependElement();
         auto &[lc, areaToMassRatio, area, mass] = tuple;
 
         // One special fragment representing the cratered remainder of the target satellite hit by the projectile
@@ -73,6 +74,9 @@ void Collision::addFurtherFragments() {
         lc = util::calculateCharacteristicLengthFromMass(mass);
         areaToMassRatio = calculateAreaMassRatio(lc);
         area = calculateArea(lc);
+
+        // Later relevant for assignParentProperties!
+        _inputMass = totalMass;
     }
 }
 
