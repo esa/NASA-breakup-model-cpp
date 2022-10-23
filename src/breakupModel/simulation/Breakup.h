@@ -218,6 +218,11 @@ protected:
      */
     void enforceMassConservation();
 
+    /**
+     * This generates fragments if outputMass > inputMass
+     * This method is called by enforceMassConservation() and overriden in the Collision subclass since the
+     * non-catastrophic collision has a special treatment due to the remaining cratered target satellite
+     */
     virtual void addFurtherFragments();
 
     /**
