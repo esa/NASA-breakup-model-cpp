@@ -29,9 +29,9 @@ void Collision::calculateFragmentCount() {
         std::swap(sat1, sat2);
     }
 
-    //The Relative Collision Velocity
+    //The Relative Collision Velocity [m/s]
     const double dv = euclideanNorm(sat1.getVelocity() - sat2.getVelocity());
-    // Squared Relative Collision Velocity
+    // Squared Relative Collision Velocity [m^2/s^2]
     const double dv2 = dv * dv;
 
     //Calculate the Catastrophic Ratio, if greater than 40 J/g then we have a catastrophic collision
@@ -45,7 +45,7 @@ void Collision::calculateFragmentCount() {
         // Horstman, A. (2020). Enhancement of s/c Fragmentation and Environment Evolution Models.
         // Final Report, Contract N. 4000115973/15/D/SR,
         // Institute of Space System, Technische Universität Braunschweig, 26(08).
-        _inputMass = sat2.getMass() * dv2 / 1000.0;
+        _inputMass = sat2.getMass() * dv2 / 1e6;
     } else {
         _isCatastrophic = true;
         _inputMass = sat1.getMass() + sat2.getMass();
