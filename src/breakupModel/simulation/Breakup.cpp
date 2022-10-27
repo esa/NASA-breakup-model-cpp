@@ -81,8 +81,8 @@ void Breakup::enforceMassConservation() {
     }
     _output.resize(newSize);
 
-    // Add new Fragments to better fulfill the Mass Budget
-    if (_enforceMassConservation) {
+    // Add new Fragments to better fulfill the Mass Budget, if mass excess was not already removed
+    if (_enforceMassConservation && newSize == oldSize) {
         this->addFurtherFragments();
         newSize = _output.size();
     }
