@@ -64,24 +64,25 @@ void Collision::calculateFragmentCount() {
 }
 
 void Collision::addFurtherFragments() {
-    if (_isCatastrophic) {
-        // If catastrophic: continue filling with more fragments according to L_c power law
-        Breakup::addFurtherFragments();
-    } else {
+    if (!_isCatastrophic) {
         // If non-catastrophic: add a remainder fragment
+        Satellite &target = _input.at(0);
+
         // Prepend, so that the bigger satellite (target) is assigned as parent
         auto tuple = _output.prependElement();
         auto &[lc, areaToMassRatio, area, mass] = tuple;
 
         // One special fragment representing the cratered remainder of the target satellite hit by the projectile
-        mass = _inputMass - _outputMass;
+        // However, it should not be heavier than the actual original parent!
+        mass = std::min(_inputMass - _outputMass, target.getMass());
         lc = util::calculateCharacteristicLengthFromMass(mass);
         areaToMassRatio = calculateAreaMassRatio(lc);
         area = calculateArea(lc);
 
         // Update the output mass accordingly
-        _outputMass = _inputMass;
+        _outputMass += mass;
     }
+    Breakup::addFurtherFragments();
 }
 
 void Collision::assignParentProperties() {

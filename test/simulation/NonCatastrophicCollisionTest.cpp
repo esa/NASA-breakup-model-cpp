@@ -67,12 +67,8 @@ TEST_F(NonCatastrophicCollisionTest, CheckRemnant) {
 
     ASSERT_FALSE(_collision->isIsCatastrophic()) << "This collision was non-catastrophic";
 
-    size_t expectedFragmentCount = 62;
-
-    ASSERT_EQ(output.size(), expectedFragmentCount);
-
     // The Remnant
-    ASSERT_NEAR(output[0].getMass(), 1505.0, 1.0);
+    ASSERT_DOUBLE_EQ(output[0].getMass(), 950.0);
 }
 
 
