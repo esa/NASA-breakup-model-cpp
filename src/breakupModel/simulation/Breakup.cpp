@@ -73,24 +73,23 @@ void Breakup::enforceMassConservation() {
     spdlog::debug("The simulation produced {} kg of debris", _outputMass);
     size_t oldSize = _output.size();
     size_t newSize = _output.size();
+    // Shrink and Remove Mass Excess
     while (_outputMass > _inputMass) {
         _outputMass -= _output.mass.back();
         newSize -= 1;
         _output.mass.pop_back();
     }
-    if (oldSize != newSize) {
-        spdlog::warn("The simulation reduced the number of fragments because the mass budget was exceeded. "
-                     "In other words: The random behaviour has produced heavier fragments");
-        spdlog::warn("The fragment count was reduced from {} to {} fragments.", oldSize, newSize);
-        spdlog::debug("The simulation corrected to {} kg of debris", _outputMass);
-        _output.resize(newSize);
-    } else if (_enforceMassConservation) {
-        //This is written in an else if, because if the former condition was true, we already had too many fragments
-        //But we only need to check this here when no fragments had to be removed.
+    _output.resize(newSize);
+
+    // Add new Fragments to better fulfill the Mass Budget
+    if (_enforceMassConservation) {
         this->addFurtherFragments();
         newSize = _output.size();
-        spdlog::warn("The simulation increased the number of fragments to enforce the mass conservation.");
-        spdlog::warn("The fragment count was increased from {} to {} fragments.", oldSize, newSize);
+    }
+    // Some helpful logging hints
+    if (oldSize != newSize) {
+        spdlog::warn("The simulation modified the number of fragments to enforce the mass conservation.");
+        spdlog::warn("The fragment count was adapted from {} to {} fragments.", oldSize, newSize);
         spdlog::debug("The simulation corrected to {} kg of debris", _outputMass);
     }
 }
