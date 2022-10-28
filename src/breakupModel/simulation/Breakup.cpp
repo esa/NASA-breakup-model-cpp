@@ -69,45 +69,48 @@ void Breakup::areaToMassRatioDistribution() {
 void Breakup::enforceMassConservation() {
     //Enforce Mass Conservation if the output mass is greater than the input mass
     _outputMass = std::reduce(std::execution::par_unseq,_output.mass.begin(), _output.mass.end(), 0.0);
-    spdlog::debug("The simulation got {} kg of input mass", _inputMass);
+    spdlog::debug("The simulation got {} kg of input mass for fragments", _inputMass);
     spdlog::debug("The simulation produced {} kg of debris", _outputMass);
     size_t oldSize = _output.size();
     size_t newSize = _output.size();
+    // Shrink and Remove Mass Excess
     while (_outputMass > _inputMass) {
         _outputMass -= _output.mass.back();
         newSize -= 1;
         _output.mass.pop_back();
     }
-    if (oldSize != newSize) {
-        spdlog::warn("The simulation reduced the number of fragments because the mass budget was exceeded. "
-                     "In other words: The random behaviour has produced heavier fragments");
-        spdlog::warn("The fragment count was reduced from {} to {} fragments.", oldSize, newSize);
-        spdlog::debug("The simulation corrected to {} kg of debris", _outputMass);
-        _output.resize(newSize);
-    } else if (_enforceMassConservation) {
-        //This is written in an else if, because if the former condition was true, we already had too many fragments
-        //But we only need to check this here when no fragments had to be removed.
-        while (_outputMass < _inputMass) {
-            //Order in the tuple: 0: L_c | 1: A/M | 2: Area | 3: Mass
-            //Create new element and assign values
-            auto tuple = _output.appendElement();
-            auto &[lc, areaToMassRatio, area, mass] = tuple;
-            lc = calculateCharacteristicLength();
-            areaToMassRatio = calculateAreaMassRatio(lc);
-            area = calculateArea(lc);
-            mass = calculateMass(area, areaToMassRatio);
+    _output.resize(newSize);
 
-            //Calculate new mass
-            _outputMass += mass;
-        }
-        //Remove the element which has lead to the exceeding of the mass budget
-        _outputMass -= _output.mass.back();
-        _output.popBack();
+    // Add new Fragments to better fulfill the Mass Budget, if mass excess was not already removed
+    if (_enforceMassConservation && newSize == oldSize) {
+        this->addFurtherFragments();
         newSize = _output.size();
-        spdlog::warn("The simulation increased the number of fragments to enforce the mass conservation.");
-        spdlog::warn("The fragment count was increased from {} to {} fragments.", oldSize, newSize);
+    }
+    // Some helpful logging hints
+    if (oldSize != newSize) {
+        spdlog::warn("The simulation modified the number of fragments to enforce the mass conservation.");
+        spdlog::warn("The fragment count was adapted from {} to {} fragments.", oldSize, newSize);
         spdlog::debug("The simulation corrected to {} kg of debris", _outputMass);
     }
+}
+
+void Breakup::addFurtherFragments() {
+    while (_outputMass < _inputMass) {
+        //Order in the tuple: 0: L_c | 1: A/M | 2: Area | 3: Mass
+        //Create new element and assign values
+        auto tuple = _output.appendElement();
+        auto &[lc, areaToMassRatio, area, mass] = tuple;
+        lc = calculateCharacteristicLength();
+        areaToMassRatio = calculateAreaMassRatio(lc);
+        area = calculateArea(lc);
+        mass = calculateMass(area, areaToMassRatio);
+
+        //Calculate new mass
+        _outputMass += mass;
+    }
+    //Remove the element which has lead to the exceeding of the mass budget
+    _outputMass -= _output.mass.back();
+    _output.popBack();
 }
 
 void Breakup::deltaVelocityDistribution() {
