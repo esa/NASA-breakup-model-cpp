@@ -83,10 +83,9 @@ The given yaml-file should look like this:
   simulation:
     minimalCharacteristicLength: 0.05 #minimal fragment L_c in [m]
     simulationType: COLLISION         #Option (Alias): COLLISION (CO) or EXPLOSION (EX)
-                                      #If not given type is determined
-                                      # by number of input satellites 
+                                      #If not given, type is determined by number of (filtered)
+                                      #input satellites (1: EX, 2: CO, >2: Exception) 
     currentMaxID: 48514               #For determining fragment ID
-                               
                                       #Should be the currently largest given NORAD-Catalog ID
                                       #If not given, zero is assumed
     inputSource: ["../data.yaml"]     #Path to input file(s) - One of the following:
@@ -189,7 +188,7 @@ it produces both, either of them or none (see YAML Configuration File)
 | j       | Ejection Velocity [m/s]   |         | |
 | p       | Position [m]              |         | |
 
-## Library
+## How to use the project as a library
 The Breakup Simulation can be used directly from any C++ project
 without the need of file input, etc.
 To create a new Breakup Simulation just follow these four steps:
@@ -201,17 +200,83 @@ To create a new Breakup Simulation just follow these four steps:
 3. Create your Breakup Simulation
 4. Run and get the Result!
 
-Example:
+For further examples see [main.cpp](src/main.cpp) and the provided [example configurarions](example-config).
 
+### Example CMake integration:
+```cmake
+cmake_minimum_required(VERSION 3.16)
+project(FOO)
+
+# ------------------------- get the breakup model -------------------------
+# Enable ExternalProject CMake module
+include(FetchContent)
+
+# OPTIONAL: disable stuff not needed when used as a lib
+set(BUILD_BREAKUP_MODEL_TESTS OFF CACHE INTERNAL "")
+set(BUILD_BREAKUP_MODEL_SIM OFF CACHE INTERNAL "")
+
+FetchContent_Declare(
+        BreakupModelfetch
+        GIT_REPOSITORY git@github.com:esa/NASA-breakup-model-cpp.git
+        # GIT_TAG master
+)
+
+# Get Breakup Model source and binary directories from CMake project
+FetchContent_MakeAvailable(BreakupModelfetch)
+
+# OPTIONAL: Disable potential warnings
+# from the library target
+target_compile_options(breakupModel_lib PRIVATE -w)
+# from included headers
+get_target_property(propval breakupModel_lib INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(breakupModel_lib SYSTEM PUBLIC "${propval}")
+
+# -------------------- define your target and link it ---------------------
+
+add_executable(fooExe foo.cpp)
+target_compile_features(fooExe PUBLIC cxx_std_17)
+target_link_libraries(fooExe PUBLIC breakupModel_lib)
+```
+
+### Example C++ Code integration:
 ```cpp
-    //RuntimeInput via the RuntimeInputSource Object (minmial Config: minL_c = 0.05 + inputSatellites)
+#include <breakupModel/input/RuntimeInputSource.h>
+#include <breakupModel/model/Satellite.h>
+#include <breakupModel/model/SatelliteBuilder.h>
+#include <breakupModel/simulation/BreakupBuilder.h>
+
+int main() {
+    // Generate satellites to collide.
+    SatelliteBuilder satelliteBuilder;
+    // The number of Satellites determines the type of the simulation.
+    // Add an idFilter to your config to only consider one or two satellites.
+    // (See brief-overview-on-the-available-options.)
+    std::vector<Satellite> satellites{
+        satelliteBuilder
+            .setID(0)
+            .setPosition({0.,0.,0.})  // [m]
+            .setVelocity({0.,1.,0.})  // [m/s^2]
+            .setMass(500.)            // [kg]
+            .getResult(),
+        satelliteBuilder
+            .setID(1)
+            .setPosition({0.,0.,0.})  // [m]
+            .setVelocity({0.,0.,1.})  // [m/s^2]
+            .setMass(500.)            // [kg]
+            .getResult(),
+    };
+
+    // Minimal RuntimeInputSource only with minLc = 0.05 [m] and all involved satellites.
     auto configSource = std::make_shared<RuntimeInputSource>(0.05, satellites);
-    //Give the BreakupBuilder its configuration object (YMALConfigurationReader or RuntimeInputSource or your own derived source)
+    // Initialize a BreakupBuilder with a configuration object.
+    // (YMALConfigurationReader or RuntimeInputSource or your own derived source.)
     BreakupBuilder breakupBuilder{configSource};
-    //Create the Breakup Simulation
+    // Create the actual breakup simulation.
     auto breakup = breakupBuilder.getBreakup();
-    //Run it and get the result via breakup.getResult();
+    // Run it and collect the result.
     breakup->run();
+    std::vector<Satellite> debris = breakup->getResult();
+}
 ```
 ## Testing
 The tests use the framework GoogleTest and
