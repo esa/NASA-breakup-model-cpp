@@ -61,7 +61,7 @@ struct Epoch {
             {8,  30},    //September 30 days
             {9,  31},    //October 31 days
             {10, 30},    //November 30 days
-            {11, 30}     //December 31 days
+            {11, 31}     //December 31 days
     };
 
     /**
